@@ -61,6 +61,7 @@ html::-webkit-scrollbar {
     width: 20rem;
     height: 30rem;
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     overflow: visible;
     cursor: move;
     top: 25%;
