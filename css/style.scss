@@ -1,0 +1,224 @@
+$isOnWeakMac: true;
+$borderRadius: 20px;
+$pageMargin: 2vw;
+
+$color-light: #fff5;
+$color-white: #fffa;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import 'roboto.scss';
+@import 'helper.scss';
+
+:root {
+    --scroll-animation-progress: 0;
+}
+
+* {
+    @extend .roboto-black;
+    color: #fff;
+}
+
+html, body {
+    @extend .no-padding-margin;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+.front-page{
+    @extend .roboto-black;
+    font-size: 50px;
+    @extend .flex-row;
+}
+
+.front-page-title{
+    color: $color-light;
+}
+
+.front-page-name{
+    color: $color-white;
+}
+
+.front-page-textarea{
+    @extend .flex-column;
+    width: 75vw;
+}
+
+.front-page-floaty{
+    color: $color-light;
+    font-size: 100px;
+    position: absolute;
+    top: 20%;
+}
+
+.header-right{
+    @extend .roboto-light;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    font-size: 0.4em;
+    margin: $pageMargin;
+}
+
+canvas[id^="background-"] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+#backgroundText{
+    position: fixed;
+    top: 50%;
+    left: 0%;
+    transform: translate(0, -50%);
+    color: #0001;
+    font-size: 200px;
+    @extend .roboto-black;
+    word-wrap: break-word;
+    white-space: nowrap;
+    animation: backgroundTextMove 20s linear infinite;
+    z-index: -1;
+}
+
+@keyframes backgroundTextMove {
+    0% {
+        left: 0%;
+    }
+    100% {
+        left: -100%;
+    }
+}
+
+.area{
+    @extend .fullscreen;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+}
+
+.card {
+    background-color: #ffffff0a;
+    border-radius: $borderRadius;
+    width: 20rem;
+    aspect-ratio: 1/1.5;
+    @if not $isOnWeakMac {
+        backdrop-filter: blur(20px);
+        --webkit-backdrop-filter: blur(20px);
+    }
+    overflow: visible;
+    cursor: move;
+    top: 25%;
+    left: 25%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+}
+
+.card .content{
+    flex: 1;
+    @extend .flex-center;
+    flex-direction: column;
+}
+
+.card .content img {
+    width: 75%;
+    object-fit: cover;
+    border-radius: $borderRadius;
+    z-index: 2;
+    box-shadow: none;
+    filter: drop-shadow(0px 10px 15px #0005);
+    transition: filter 0.5s, width 0.5s;
+    cursor: pointer;
+}
+
+.card .content img:hover {
+    filter: drop-shadow(0px 15px 25px #0005);
+    width: 80%;
+}
+
+.card .title-bar{
+    @extend .flex-center;
+    background-color: #ffffff0a;
+    height: 60px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    z-index: 1;
+}
+
+.card .title-bar .title-bar-text{
+    color: #ffffffff;
+    font-family: "Roboto";
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.card .bottom-bar{
+    @extend .flex-center;
+    background-color: #ffffff0a;
+    height: 60px;
+    border-bottom-left-radius: $borderRadius;
+    border-bottom-right-radius: $borderRadius;
+    z-index: 1;
+    flex-direction: row;
+}
+
+.card .bottom-bar img{
+    height: 75%;
+}
+
+.movemouse, .facemouse{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+#sidebar{
+    position: fixed;
+    right: $pageMargin;
+    height: 100vh;
+    width: 50px;
+    @extend .flex-center;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 9999;
+    overflow: visible;
+}
+
+#sidebar .sidebar-element{
+    align-items: center;
+    gap: 10px;
+    color: $color-light;
+    transform: scale(1);
+    transition: transform 0.5s;
+    transform-origin: right;
+    cursor: pointer;
+    display: flex;
+    text-wrap: nowrap;
+    flex-wrap: nowrap;
+}
+
+#sidebar .sidebar-element:hover{
+    transform: scale(1.1);
+}
+
+#sidebar .sidebar-element .sidebar-circle{
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    border: $color-light solid 4px;
+}
+
+.sidebar-progressbar{
+    width: 4px;
+    height: 8vh;
+    background-color: $color-light;
+    border-radius: 5px;
+    margin: 12px;
+}

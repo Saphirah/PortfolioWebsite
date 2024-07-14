@@ -4,179 +4,191 @@
         <meta charset="UTF-8">
         <title>Portfolio</title>
         <link rel="stylesheet" href="css/style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-
         <script src="js/blurhash_min.js"></script>
+        <script src="js/typewriter.js" defer></script>
+        <script src="js/draggable.js" defer></script>
+        <script type="module" src="js/main.js"></script>
     </head>
     <body>
-        <canvas id="background"></canvas>
         <script>
-            drawBlurHashOnCanvas(document.getElementById("background"), "L60wu:i^U[kspye-Zgg5g4adaJf,");
+            let backgrounds = [
+                "L60wu:i^U[kspye-Zgg5g4adaJf,",
+                "L68fyn54J5w~9s^UnlI-9q-Y-Es:",
+                "L26PkUsm2WFH|KFaSLJ*n+OB,GFa"
+            ];
+
+            let lastCanvas = null;
+            backgrounds.forEach((value, index) => {
+                let canvas = document.createElement("canvas");
+                canvas.id = "background-" + index;
+                canvas.style.zIndex = -10 - index;
+                drawBlurHashOnCanvas(canvas, value);
+                lastCanvas = canvas;
+            });
+
+
+
+            window.addEventListener('scroll', updateCanvas);
+
+            function updateCanvas(){
+                requestAnimationFrame(() => {
+                    const scroll = window.scrollY;
+                    const height = window.innerHeight;
+                    const currentFrame = Math.floor(scroll / height);
+
+                    const currentCanvas = document.getElementById("background-" + (currentFrame));
+                    const nextCanvas = document.getElementById("background-" + (currentFrame + 1));
+                    const previousCanvas = document.getElementById("background-" + (currentFrame - 1));
+
+                    if(currentCanvas) currentCanvas.style.opacity = Math.max(0, 1 - (scroll / height - currentFrame));
+                    if(nextCanvas) nextCanvas.style.opacity = 1;
+                    if(previousCanvas) previousCanvas.style.opacity = 0;
+                });
+            }
+            updateCanvas();
         </script>
         <div id="backgroundText">
-            FULLSTACK WEB APP GAMES UNITY UNREAL
+            WEB APP GAMES UNITY UNREAL SHADER C++ C# HTML PHP JS CSS VISUAL BASIC LUA
         </div>
 
-        <div class="area">
-            <div class="card draggable facemouse" style="top: 25%; left: 15%;">
-                <div class="title-bar movemouse">
-                    <div style="z-index: 1" class="title-bar-text movemouse">
-                        Scrapyard Fisher
-                    </div>
-                    <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
-                        Scrapyard Fisher
-                    </div>
-                </div>
-                <div class="content">
-                    <img src="images/SF.png" alt="Between Worlds" class="movemouse" style="margin-left: -40px; width: 90%">
-                </div>
-                <div class="bottom-bar movemouse">
-                    <img src="images/unity.png" alt="Unity">
-                </div>
-
+        <div id="sidebar">
+            <div class="flex-row sidebar-element" onClick="document.getElementById('main-page').scrollIntoView();">
+                Main Page
+                <div class="sidebar-circle"></div>
             </div>
-
-            <div class="card draggable facemouse" style="top: 20%; left: 35%;">
-                <div class="title-bar movemouse">
-                    <div style="z-index: 1" class="title-bar-text movemouse">
-                        Between Worlds
-                    </div>
-                    <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
-                        Between Worlds
-                    </div>
-                </div>
-                <div class="content">
-                    <img src="images/BW.png" alt="Between Worlds" class="movemouse">
-                </div>
-                <div class="bottom-bar movemouse">
-                    <img src="images/unity.png" alt="Unity">
-                </div>
-
+            <div class="sidebar-progressbar"></div>
+            <div class="flex-row sidebar-element" onClick="document.getElementById('projects').scrollIntoView();">
+                Skills
+                <div class="sidebar-circle"></div>
             </div>
-
-            <div class="card draggable facemouse" style="top: 20%; left: 55%;">
-                <div class="title-bar movemouse">
-                    <div style="z-index: 1" class="title-bar-text movemouse">
-                        Tiny Lizard People
-                    </div>
-                    <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
-                        Tiny Lizard People
-                    </div>
-                </div>
-                <div class="content">
-                    <img src="images/tlp.png" alt="Between Worlds" class="movemouse">
-                </div>
-                <div class="bottom-bar movemouse">
-                    <img src="images/unity.png" alt="Unity">
-                </div>
-
+            <div class="sidebar-progressbar"></div>
+            <div class="flex-row sidebar-element" onClick="document.getElementById('projects').scrollIntoView();">
+                Projects
+                <div class="sidebar-circle"></div>
             </div>
-
-            <div class="card draggable facemouse" style="top: 25%; left: 75%;">
-                <div class="title-bar movemouse">
-                    <div style="z-index: 1" class="title-bar-text movemouse">
-                        Advanced Magic
-                    </div>
-                    <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
-                        Advanced Magic
-                    </div>
-                </div>
-                <div class="content">
-                    <img src="images/AM.png" alt="Between Worlds" class="movemouse">
-                </div>
-                <div class="bottom-bar movemouse">
-                    <img src="images/unreal.png" alt="Unity">
-                </div>
-
-            </div>
-
         </div>
-        <script>
-
-            function cleanTransforms(element, transforms = ['rotateX', 'rotateY', 'translateX', 'translateY']) {
-                let currentTransform = element.style.transform;
-                let transformRegex = new RegExp('(' + transforms.join('|') + ')\\([^)]+\\)\\s*', 'g');
-                currentTransform = currentTransform.replace(transformRegex, '');
-                element.style.transform = currentTransform;
-            }
 
 
-            function faceMouse(x, y, query = ".facemouse", rotate = true, invertTranslate = false){
-                const width = window.innerWidth / 2;
-                const height = window.innerHeight / 2;
-
-                document.querySelectorAll(query).forEach(elem => {
-                    const zIndex = parseInt(window.getComputedStyle(elem).zIndex, 10) || 0;
-                    cleanTransforms(elem);
-                    elem.style.transform += (rotate ?
-                        'rotateX(' + (y - height) / -80 + 'deg) ' +
-                        'rotateY(' + (x - width) / 80 + 'deg) ' : '') +
-                        'translateX(' + ((x - width) / 100 * zIndex * (invertTranslate ? -1 : 1)) + 'px) ' +
-                        'translateY(' + ((y - height) / 100 * zIndex* (invertTranslate ? -1 : 1)) + 'px) ';
-                });
-            }
-
-            document.addEventListener('mousemove', function(event) {
-                faceMouse(event.clientX, event.clientY);
-                faceMouse(event.clientX, event.clientY, ".movemouse", false);
-                faceMouse(event.clientX, event.clientY, ".mousemove-reverse", false, true);
-            });
-
-        </script>
-
-
-    <script>
-        document.querySelectorAll('.draggable').forEach(el => {
-            let newPosX = 0, newPosY = 0, startPosX = 0, startPosY = 0;
-
-            function mouseMove(e) {
-                // calculate the new position
-                newPosX = startPosX - e.clientX;
-                newPosY = startPosY - e.clientY;
-
-                // with each move we also want to update the start X and Y
-                startPosX = e.clientX;
-                startPosY = e.clientY;
-
-                // set the element's new position:
-                el.style.top = (el.offsetTop - newPosY) + "px";
-                el.style.left = (el.offsetLeft - newPosX) + "px";
-
-                el.style.top = Math.max(0, Math.min(window.innerHeight - el.offsetHeight, el.offsetTop)) + "px";
-                el.style.left = Math.max(0, Math.min(window.innerWidth - el.offsetWidth, el.offsetLeft)) + "px";
-                updateRotation(el);
-            }
-
-            function updateRotation(el){
-                cleanTransforms(el, ["rotateZ"]);
-                el.style.transform += 'rotateZ(' + (el.offsetLeft + el.getBoundingClientRect().width / 2 - newPosX - window.innerWidth / 2) / 50 + 'deg) ';
-            }
-
-            // when the user clicks down on the element
-            el.addEventListener('mousedown', function(e) {
-                e.preventDefault();
-
-                // get the starting position of the cursor
-                startPosX = e.clientX;
-                startPosY = e.clientY;
-
-                // attach event listener for moving the mouse
-                document.addEventListener('mousemove', mouseMove);
-
-                // stop moving when mouse button is released
-                document.addEventListener('mouseup', function() {
-                    document.removeEventListener('mousemove', mouseMove);
-                });
-            });
-
-            updateRotation(el);
-        });
-
-    </script>
-
-        <div class="area">
+        <div class="area front-page flex-center" id="main-page">
+            <div class="front-page-textarea">
+                <header typewriter class="front-page-title">
+                    Software Development
+                </header>
+                <header typewriter class="front-page-name">
+                    Philipp Erber
+                </header>
+            </div>
         </div>
+        <!--
+                <div class="area flex-row" id="projects">
+                    <div moveable class="card facemouse" style="top: 25%; left: 15%;">
+                        <div class="title-bar movemouse">
+                            <div style="z-index: 1" class="title-bar-text movemouse">
+                                Scrapyard Fisher
+                            </div>
+                            <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
+                                Scrapyard Fisher
+                            </div>
+                        </div>
+                        <div class="content">
+                            <img src="images/SF.png" alt="Between Worlds" class="movemouse" style="margin-left: -40px; width: 90%">
+                        </div>
+                        <div class="bottom-bar movemouse">
+                            <img src="images/unity.png" alt="Unity">
+                        </div>
+
+                    </div>
+
+                    <div moveable class="card facemouse" style="top: 20%; left: 35%;">
+                        <div class="title-bar movemouse">
+                            <div style="z-index: 1" class="title-bar-text movemouse">
+                                Between Worlds
+                            </div>
+                            <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
+                                Between Worlds
+                            </div>
+                        </div>
+                        <div class="content">
+                            <img src="images/BW.png" alt="Between Worlds" class="movemouse">
+                        </div>
+                        <div class="bottom-bar movemouse">
+                            <img src="images/unity.png" alt="Unity">
+                        </div>
+
+                    </div>
+
+                    <div moveable class="card facemouse" style="top: 20%; left: 55%;">
+                        <div class="title-bar movemouse">
+                            <div style="z-index: 1" class="title-bar-text movemouse">
+                                Tiny Lizard People
+                            </div>
+                            <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
+                                Tiny Lizard People
+                            </div>
+                        </div>
+                        <div class="content">
+                            <img src="images/tlp.png" alt="Between Worlds" class="movemouse">
+                        </div>
+                        <div class="bottom-bar movemouse">
+                            <img src="images/unity.png" alt="Unity">
+                        </div>
+
+                    </div>
+
+                    <div moveable class="card facemouse" style="top: 25%; left: 75%;">
+                        <div class="title-bar movemouse">
+                            <div style="z-index: 1" class="title-bar-text movemouse">
+                                Advanced Magic
+                            </div>
+                            <div style="z-index: 1; position: absolute; color: #000000a0; filter: blur(2px);" class="title-bar-text">
+                                Advanced Magic
+                            </div>
+                        </div>
+                        <div class="content">
+                            <img src="images/AM.png" alt="Between Worlds" class="movemouse">
+                        </div>
+                        <div class="bottom-bar movemouse">
+                            <img src="images/unreal.png" alt="Unity">
+                        </div>
+
+                    </div>
+
+                </div>
+                <script>
+                    let onWeakMac = true;
+
+                    function faceMouse(x, y, query = ".facemouse", rotate = true, invertTranslate = false){
+                        const width = window.innerWidth;
+                        const height = window.innerHeight;
+                        const halfWidth = width / 2;
+                        const halfHeight = height / 2;
+
+
+                        document.querySelectorAll(query).forEach(elem => {
+                            const zIndex = parseInt(window.getComputedStyle(elem).zIndex, 10) || 0;
+                            cleanTransforms(elem);
+                            elem.style.transform += (rotate ?
+                                'rotateX(' + (y - halfWidth) / width * -30 + 'deg) ' +
+                                'rotateY(' + (x - halfHeight) / width * 30 + 'deg) ' : '') +
+                                'translateX(' + ((x - halfWidth) / width * 30 * zIndex * (invertTranslate ? -1 : 1)) + 'px) ' +
+                                'translateY(' + ((y - halfHeight) / width * 30 * zIndex* (invertTranslate ? -1 : 1)) + 'px) ';
+                        });
+                    }
+
+                    document.addEventListener('mousemove', function(event) {
+                        //if(onWeakMac) return;
+                        faceMouse(event.clientX, event.clientY);
+                        faceMouse(event.clientX, event.clientY, ".movemouse", false);
+                        faceMouse(event.clientX, event.clientY, ".mousemove-reverse", false, true);
+                    });
+
+                </script>
+
+                <div class="area">
+                </div>
+
+                <div class="area">
+                </div>
+                -->
     </body>
 </html>
